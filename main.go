@@ -2,34 +2,25 @@ package main
 
 import (
 	"./commands"
-	"encoding/json"
+	"./config"
 	"fmt"
-	"io/ioutil"
 	"os"
 	"os/signal"
 	"syscall"
 	"time"
 
 	"github.com/bwmarrin/discordgo"
+	"github.com/joho/godotenv"
 )
 
-type Config struct {
-	Token  string
-	Prefix string
-}
-
-var cfg Config
+var cfg *config.BotConfig
 
 func init() {
-	data, err := ioutil.ReadFile("config.json")
-	if err != nil {
-		fmt.Print(err)
+	if err := godotenv.Load(); err != nil {
+		fmt.Println("No .env file found")
 	}
-	err = json.Unmarshal(data, &cfg)
-	if err != nil {
-		fmt.Println("error:", err)
-	}
-	os.Setenv("PREFIX", cfg.Prefix)
+
+	cfg = config.GetBotConfig()
 }
 
 func main() {
