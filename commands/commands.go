@@ -1,15 +1,16 @@
 package commands
 
 import (
+	"../config"
 	"fmt"
 	"github.com/bwmarrin/discordgo"
-	"os"
 	"strings"
 	"time"
 )
 
 func HandleCommands(s *discordgo.Session, m *discordgo.Message, t time.Time) {
-	msg := strings.TrimPrefix(m.Content, os.Getenv("PREFIX"))
+	cfg := config.GetBotConfig()
+	msg := strings.TrimPrefix(m.Content, cfg.Prefix)
 	cmd := strings.Split(msg, " ")[0]
 
 	switch cmd {
